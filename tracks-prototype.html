@@ -9,6 +9,7 @@
   <div id="displayButton">
     hit me
   </div>
+  <audio id="track1" src="source_audio/eyes.m4a" type="audio/mpeg" crossorigin="anonymous"></audio>
 </body>
 
 
@@ -16,6 +17,19 @@
 
 <script>
 
+var isPlaying = false;
+
+// Load the audio context library and build an audio context object that will
+// manage how music is played
+// Tutorial: https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Using_Web_Audio_API
+const AudioContext = window.AudioContext || window.webkitAudioContext;
+const audioCtx = new AudioContext();
+// get the audio element
+const audioElement = document.querySelector('#track1');
+// create a audio context track object
+const track = audioCtx.createMediaElementSource(audioElement);
+// connect track to destination
+track.connect(audioCtx.destination);
 
 /**
  * Dragged event handler function -- every time the user mouse registers a drag
@@ -56,7 +70,15 @@ function mainLoad() {
   d3.select('#displayButton').on("click", displayInfo);
   function displayInfo() {
     var xVal = document.getElementById("track1").getCTM();
-    console.log(xVal);
+    if (!isPlaying) {
+      console.log('Play');
+      audioElement.play();
+      isPlaying = true;
+    } else {
+      console.log('Pause');
+      audioElement.pause();
+      isPlaying = false;
+    }
   };
 
 };
