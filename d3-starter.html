@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang = "en">
+  <head>
+    <script src = "https://cdnjs.cloudflare.com/ajax/libs/d3/5.5.0/d3.js"></script>
+  </head>
+
+  <body>
+    <div class='parent'>
+    </div>
+  </body>
+  <script>
+
+    var genNumbers = function() {
+      var arr = [];
+      for (var i = 0; i < 10; i ++) {
+        arr.push(Math.random() * 101 + 50);
+      }
+      return arr;
+    };
+
+    var update = function(d3El) {
+      var data_arr = genNumbers();
+      d3El.selectAll('div')
+      .data(data_arr)
+        .style('stroke', 'red')
+        .style('background-color', 'blue')
+        .style('width', function(d) {return d + 'px';})
+        .style('height', '10px');
+
+      d3El.selectAll('div')
+      .data(data_arr).enter()
+        .append('div')
+        .style('stroke', 'red')
+        .style('background-color', 'blue')
+        .style('width', function(d) {return d + 'px';})
+        .style('height', '10px');
+    };
+
+    update(d3.select('.parent'));
+
+    setInterval(update, 2000, d3.select('.parent'));
+
+  </script>
+</html>

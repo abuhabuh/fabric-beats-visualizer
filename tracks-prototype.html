@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<html>
+
+<body>
+  <svg width="560" height="500" style="border: 1px solid black;">
+  </svg>
+  <div id="displayButton">
+    hit me
+  </div>
+</body>
+
+
+<script src="https://d3js.org/d3.v4.min.js"></script>
+
+<script>
+
+function dragged(d) {
+  console.log('adsf dx: ' + d.x);
+  d.x = d3.event.x;
+  d3.select(this).attr("transform", 'translate('+d.x+','+this.getCTM().f+')');
+};
+
+function mainLoad() {
+
+  var trackInfo = getTrackInfo();
+
+  d3.select('svg').selectAll('g')
+    .data(trackInfo)
+    .enter().append('g')
+      .attr('x', 0)
+      .attr('transform', function(d) {return 'translate(0,' + d.y + ')';})
+      .attr('width', function(d) {return d.width;})
+      .attr('height', 50)
+      .attr('id', function(d) {return d.id;})
+    .call(d3.drag().on('drag', dragged))
+    .selectAll('rect')
+      .data(function(d) {return d.trackData;})
+      .enter().append('rect')
+        .attr('fill', 'black')
+        .attr('width', 1)
+        .attr('height', function(d) {return d;})
+        .attr('x', function(d, i) {return i;});
+
+  d3.select('#displayButton').on("click", displayInfo);
+  function displayInfo() {
+    var xVal = document.getElementById("track1").getCTM();
+    console.log(xVal);
+  };
+
+};
+
+function getTrackInfo() {
+
+  return [
+    {
+      id: 'track1',
+      y: 0,
+      width: 50,
+      trackData: d3.range(50).map(function () { return Math.round(Math.random()*50);}),
+    },
+    {
+      id: 'track2',
+      y: 60,
+      width: 50,
+      trackData: d3.range(50).map(function () { return Math.round(Math.random()*50);}),
+    }
+  ]
+};
+
+mainLoad();
+
+</script>
+
+</html>
